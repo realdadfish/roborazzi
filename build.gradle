@@ -21,11 +21,15 @@ allprojects {
     }
   }
 
+  tasks.withType(GenerateModuleMetadata) {
+    enabled = false
+  }
+  
   plugins.withId('com.vanniktech.maven.publish') {
     project.group = "io.github.takahirom.roborazzi"
     mavenPublishing {
       publishToMavenCentral(com.vanniktech.maven.publish.SonatypeHost.S01)
-      signAllPublications()
+      //signAllPublications()
     }
 
     plugins.withId('maven-publish') {
@@ -96,4 +100,9 @@ tasks.register("generateReadme") {
         }
         readme.write(newReadmeContent)
     }
+}
+
+tasks.register("publishToMavenLocal") {
+    dependsOn(gradle.includedBuild("include-build").task(":roborazzi-core:publishToMavenLocal"))
+    dependsOn(gradle.includedBuild("include-build").task(":roborazzi-gradle-plugin:publishToMavenLocal"))
 }

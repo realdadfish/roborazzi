@@ -9,7 +9,11 @@ allprojects {
     project.group = "io.github.takahirom.roborazzi"
     mavenPublishing {
       publishToMavenCentral(com.vanniktech.maven.publish.SonatypeHost.S01)
-      signAllPublications()
+      //signAllPublications()
+    }
+
+    tasks.withType(GenerateModuleMetadata) {
+      enabled = false
     }
 
     plugins.withId('maven-publish') {
