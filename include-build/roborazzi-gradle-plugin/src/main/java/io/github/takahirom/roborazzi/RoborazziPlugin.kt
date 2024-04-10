@@ -42,6 +42,7 @@ private const val DEFAULT_TEMP_DIR = "intermediates/roborazzi"
  */
 open class RoborazziExtension @Inject constructor(objects: ObjectFactory) {
   val outputDir: DirectoryProperty = objects.directoryProperty()
+  val recordEnabled: Property<Boolean> = objects.property(Boolean::class.java).convention(false)
 }
 
 @Suppress("unused")
@@ -180,6 +181,7 @@ abstract class RoborazziPlugin : Plugin<Project> {
             isCompareRun.map { compareRunValue ->
               isRecordRunValue || isVerifyRunValue || isVerifyAndRecordRunValue || compareRunValue
                 || hasRoborazziTaskProperty(roborazziProperties)
+                || extension.recordEnabled.get()
             }
           }
         }
@@ -317,7 +319,7 @@ abstract class RoborazziPlugin : Plugin<Project> {
                 }
               )
               test.systemProperties["roborazzi.test.record"] =
-                isRecordRun.get() || isVerifyAndRecordRun.get()
+                isRecordRun.get() || isVerifyAndRecordRun.get() || extension.recordEnabled.get()
               test.systemProperties["roborazzi.test.compare"] = isCompareRun.get()
               test.systemProperties["roborazzi.test.verify"] =
                 isVerifyRun.get() || isVerifyAndRecordRun.get()

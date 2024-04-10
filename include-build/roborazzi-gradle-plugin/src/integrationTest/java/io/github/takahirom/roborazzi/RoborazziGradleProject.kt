@@ -170,6 +170,7 @@ class RoborazziGradleProject(val testProjectDir: TemporaryFolder) {
     private val PATH = "app/build.gradle.kts"
     var removeOutputDirBeforeTestTypeTask = false
     var customOutputDirPath: String? = null
+    var recordEnabled: Boolean? = null
 
     fun addIncludeBuild() {
       folder.root.resolve(PATH).delete()
@@ -266,15 +267,14 @@ dependencies {
           """.trimIndent()
         )
       }
+      buildFile.appendText("roborazzi {\n")
       if (customOutputDirPath != null) {
-        buildFile.appendText(
-          """
-            roborazzi {
-              outputDir.set(file("$customOutputDirPath"))
-            }
-          """.trimIndent()
-        )
+        buildFile.appendText("""outputDir.set(file("$customOutputDirPath"))\n""")
       }
+      if (recordEnabled != null) {
+        buildFile.appendText("""recordEnabled.set(${recordEnabled.toString()})\n""")
+      }
+      buildFile.appendText("}\n")
     }
   }
 

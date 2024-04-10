@@ -451,4 +451,21 @@ class RoborazziGradleProjectTest {
       checkResultCount(recorded = 1)
     }
   }
+
+  @Test
+  fun shouldNotRecordResultsByDefault() {
+    RoborazziGradleProject(testProjectDir).apply {
+      unitTest()
+      checkResultsSummaryFileNotExists()
+    }
+  }
+
+  @Test
+  fun shouldRecordResultsByDefaultIfExtensionIsConfigured() {
+    RoborazziGradleProject(testProjectDir).apply {
+      appBuildFile.recordEnabled = true
+      unitTest()
+      checkResultsSummaryFileExists()
+    }
+  }
 }
